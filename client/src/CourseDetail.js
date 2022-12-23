@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import {Consumer} from "./Context"
 
@@ -26,20 +27,17 @@ const CourseDetail = () =>{
                             userInfo.email !== "" 
                             ? 
                             <div>
-                               <a className="button" href="update-course.html">Update Course</a>
+                               <a className="button" href={`courses/${id}/update`}>Update Course</a>
                                <a className="button" href="/">Delete Course</a> 
                             </div>
                             :
                             <div></div>
 
-                          );
-                        
-                            
-                        
+                          );                       
                       }}
                          
                    </Consumer>
-                    <a className="button button-secondary" href="index.html">Return to List</a>
+                    <a className="button button-secondary" href="/">Return to List</a>
                 </div>
             </div>
                 <div className="wrap">
@@ -50,7 +48,10 @@ const CourseDetail = () =>{
                             <h3 className="course--detail--title">Course</h3>
                             <h4 className="course--name">{course.title}</h4>
                             <p>By {course.firstName} {course.lastName}</p>
-                            <p>{course.description}</p>
+                            <ReactMarkdown > 
+                               {course.description}
+                            </ReactMarkdown>
+                            
                         </div>
                         <div>
                             <h3 className="course--detail--title">Estimated Time</h3>
@@ -61,7 +62,11 @@ const CourseDetail = () =>{
                                 
                                 {course.materialsNeeded.split('*').map((material, index) => {
                                     if(material !== ''){
-                                    return <li key={index}>{material}</li>
+                                    return (
+                                        <ReactMarkdown>
+                                          <li key={index}>{material}</li>
+                                        </ReactMarkdown>
+                                    )
                                     }
                                 })} 
                             </ul>

@@ -21,38 +21,6 @@ function App() {
       password:""
     });
 
- 
-    const handleSignIn = (email, password) => {
-      fetch('http://localhost:5000/api/users', {
-         method : "GET",
-         headers : {
-          'Authorization': `Basic ${Buffer.from(`${email}:${password}`).toString('base64')}`
-         }
-      })
-      .then(res => {
-           if(res.status===200){
-              setUserInfo({
-                email:res.email,
-                password:res.password
-              })             
-           }
-      })
-      .catch(error => console.error(error.message));
-    }
-  
-
-   
-
-
-    const handleSignOut = () =>{
-        setUserInfo({
-          email:"",
-          password:""
-        });
-    }
-  
-
-
     return (
       <Provider value={userInfo}>
           <BrowserRouter>

@@ -127,7 +127,7 @@ app.get('/api/courses', async(req, res)=> {
 
   const courses = await Course.findAll({include: User});
   const allCourses = courses.map(course => ({
-    
+      id: course.id,
       title: course.title,
       description: course.description,
       estimatedTime: course.estimatedTime,
