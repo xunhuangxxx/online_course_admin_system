@@ -1,10 +1,22 @@
 import React, {useEffect, useState} from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
+import {useCookies} from "react-cookie"
 
-const UserSignUp = () => {
-    const [user, setUser] = useState({});
+
+
+const UserSignUp = (props) => {
+    const [user, setUser] = useState({
+        firstName: "",
+        lastName: "",
+        emailAddress: "",
+        password: "",
+    });
     const [errorMsg, setErrorMsg] = useState("");
-    let navigate = useNavigate();
+
+    const [cookies, setCookie] = useCookies();
+
+    const navigate = useNavigate();
+    
 
     const handleSignUp = (e) =>{
         e.preventDefault();
@@ -16,19 +28,35 @@ const UserSignUp = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
-        })
+        })     
         .then(res => {
             if(res.status !== 201){
-              return res.json();              
-            } else{
-              return {};
-            }   
-        })
-        .then(res => {
-            if(res.errors){
-              setErrorMsg(res.errors.join(", "));        
+              return res.json();
+            }else{
+              props.setContextSignUp({
+               
+               firstName: user.firstName,
+               lastName: user.lastName,
+               emailAddress: user.emailAddress, 
+               password: user.password,  
+              });
+              
+              setCookie(JSON.stringify({
+               firstName: user.firstName,
+               lastName: user.lastName,
+               emailAddress: user.emailAddress,
+               password: user.password
+              
+              }))
+              //return to previous page after sign up
+              return navigate(-1);        
+           }   
+         })
+         .then(res => {
+            if(res && res.errors){
+              setErrorMsg(res.errors.join(", "));   
             }
-        })
+         });
     }
 
     return (

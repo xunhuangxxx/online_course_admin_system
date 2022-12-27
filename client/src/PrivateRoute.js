@@ -8,8 +8,9 @@ const PrivateRoute = ({children}) => {
       return (
         <Consumer>
           {(userInfo)=> {
+            
             return (
-               userInfo.email !== "" ? children : <Navigate to="/signin" />
+               userInfo.emailAddress && userInfo.emailAddress !== "" ? children : <Navigate to="/signin" />
             )
           }}          
         </Consumer>

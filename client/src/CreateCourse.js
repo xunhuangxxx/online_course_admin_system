@@ -1,31 +1,61 @@
 import React, {useEffect, useState} from "react";
+import { Consumer } from "./Context";
+import {Buffer} from 'buffer';
 
-const CreateCourse = () => {
-    const [errorMsg, setErrorMsg] = useState("");
+
+const CreateCourse = (props) => {
+
+    const [errorMsg, setErrorMsg] = useState([]);
+    
     const [detail, setDetail] = useState({
+        userId: props.userInfo.userId,
+        title: "",
+        description: "",
+        estimatedTime: "",
         materialsNeeded: ""
     });
+// create function for submit button
+    const handleSubmit = (e)=>{
 
-    fetch('http://localhost:5000/api/courses', {method : "POST"})
-    .then(res => res.json())
-    .then(res => {
-        if(res.errors){       
-            setErrorMsg(res.errors);        
-        }
-    })
+        e.preventDefault();
+        console.log(props.userInfo);
+        fetch('http://localhost:5000/api/courses', {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${Buffer.from(`${props.userInfo.emailAddress}:${props.userInfo.password}`).toString('base64')}`
+            },
+            body: JSON.stringify(detail)
+        })
+        .then(res => {
+            if(res.status !== 201){  
+                return res.json();                   
+            }else{
+                return {}
+            }
+        })
+        .then(res => {
+            if(res.errors) {
+               setErrorMsg(res.errors)
+            }
+        })
+    }; 
 
     return (
 
         <div className="wrap">
         <h2>Create Course</h2>
-        <div className="validation--errors">
+        {
+            errorMsg.length !== 0 && 
+            (<div className="validation--errors">
             <h3>Validation Errors</h3>
             <ul>
                 {errorMsg.map(error => {
                     return  <li>{error}</li>
                 })}                
             </ul>
-        </div>
+            </div>)
+        }
         <form>
             <div className="main--flex">
                 <div>
@@ -45,7 +75,7 @@ const CreateCourse = () => {
                     <textarea id="materialsNeeded" name="materialsNeeded" onChange={e => setDetail(prevDetail => ({...prevDetail, materialsNeeded: e.target.value}))} value={detail.materialsNeeded}></textarea>
                 </div>
             </div>
-            <button className="button" type="submit">Create Course</button>
+            <button className="button" type="submit" onClick={handleSubmit}>Create Course</button>
             <button className="button button-secondary" onClick={event => event.preventDefault()}>Cancel</button>
         </form>
     </div>

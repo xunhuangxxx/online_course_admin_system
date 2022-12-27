@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from "react";
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
-import {Consumer} from "./Context"
+import {Consumer} from "./Context";
+import {Buffer} from 'buffer';
 
-const CourseDetail = () =>{
+const CourseDetail = (props) =>{
+    //get id params from path
     let { id } = useParams();
     const [course, setCourse] = useState({
         materialsNeeded: '',
@@ -14,21 +16,30 @@ const CourseDetail = () =>{
         .then(res => setCourse(res))
         .catch(error => console.error(error.message));
     },[id]);
-
-    return (
+    
+    const handleDelete = () => {
+        
+        fetch(`http://localhost:5000/api/courses/${id}`, {
+            method:"DELETE",
+            headers : {
+                'Authorization': `Basic ${Buffer.from(`${props.userInfo.emailAddress}:${props.userInfo.password}`).toString('base64')}`
+            },
+        })
+        
+    }
+    return ( 
         <main>
             <div className="actions--bar">
-                 <div className="wrap">
-                    
-              
+                <div className="wrap">
+{/* get user authorization                */}
                   <Consumer>
                        {(userInfo)=> {
                           return (
-                            userInfo.email !== "" 
+                            userInfo.emailAddress !== "" 
                             ? 
                             <div>
-                               <a className="button" href={`courses/${id}/update`}>Update Course</a>
-                               <a className="button" href="/">Delete Course</a> 
+                               <a className="button" href={`/courses/${id}/update`}>Update Course</a>
+                               <a className="button" href="/" onClick={handleDelete}>Delete Course</a> 
                             </div>
                             :
                             <div></div>
@@ -47,7 +58,14 @@ const CourseDetail = () =>{
                         <div>
                             <h3 className="course--detail--title">Course</h3>
                             <h4 className="course--name">{course.title}</h4>
-                            <p>By {course.firstName} {course.lastName}</p>
+                            <Consumer>
+                                {(userInfo) => {
+                                    return (
+                                        <p>By {userInfo.firstName} {userInfo.lastName}</p>
+                                    )
+                                }}
+                            </Consumer>
+                            
                             <ReactMarkdown > 
                                {course.description}
                             </ReactMarkdown>
@@ -60,13 +78,15 @@ const CourseDetail = () =>{
                             <h3 className="course--detail--title">Materials Needed</h3>
                             <ul className="course--detail--list">
                                 
-                                {course.materialsNeeded.split('*').map((material, index) => {
+                                {course.materialsNeeded && course.materialsNeeded.split('*').map((material, index) => {
                                     if(material !== ''){
-                                    return (
-                                        <ReactMarkdown>
-                                          <li key={index}>{material}</li>
-                                        </ReactMarkdown>
-                                    )
+                                        return (
+                                            <li key={index}>
+                                                <ReactMarkdown>
+                                                   {material}
+                                                </ReactMarkdown>
+                                            </li>
+                                        )
                                     }
                                 })} 
                             </ul>

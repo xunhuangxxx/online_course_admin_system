@@ -63,9 +63,9 @@ const userAuthentication = async (req, res, next) => {
   if(message){
     console.error(message);
     res.status(401).json({ message: 'Access Denied' });
- }else{
-     next();
- }    
+  }else{
+    next();
+  }    
 }
 
 
@@ -82,6 +82,7 @@ app.get('/', (req, res) => {
 // Route that get all the users' info
 app.get('/api/users', userAuthentication, async(req, res)=> {
    res.json({
+     userId: req.currentUser.id,
      firstName: req.currentUser.firstName,
      lastName: req.currentUser.lastName,
      emailAddress: req.currentUser.emailAddress
@@ -210,9 +211,16 @@ app.put('/api/courses/:id', userAuthentication, async(req, res)=> {
 app.delete('/api/courses/:id', userAuthentication, async(req, res)=> {
   const courseId = req.params.id;
   const course = await Course.findByPk(courseId);
-  if(course.userId===req.currentUser.id){
-    await course.destroy();
-    res.status(204);
+  if(course.userId === req.currentUser.id){
+    try {
+      await course.destroy();
+      res.status(204);
+    } catch (e) {
+      console.error(e);
+      res.status(403).json({
+        message: 'Course can not be deleted',
+      });; 
+    }
   }else{
     res.status(403).json({
       message: 'Course can not be deleted',

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route,  NavLink, Routes, Redirect} from 'react-router-dom';
 import { Provider } from './Context';
+import { CookiesProvider , useCookies} from "react-cookie";
 
 import './App.css';
 import Header from "./Header";
@@ -15,38 +16,44 @@ import UserSignOut from "./UserSignOut";
 import PrivateRoute from "./PrivateRoute";
 
 function App() {
+    const [cookies, setCookies] = useCookies();
 
+    const user = cookies.user || {};
+   // get cookies if exist 
     const [userInfo, setUserInfo] = useState({
-      email:"",
-      password:""
+      userId: user.userId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      emailAddress: user.emailAddress,
+      password: user.password
     });
-
+     
     return (
-      <Provider value={userInfo}>
-          <BrowserRouter>
-              <Header />
-              <Routes>
-                  <Route exact path="/" element={<Courses />} />
-                  <Route path="/courses/:id" element={<CourseDetail />} />
-                  <Route path="/courses/create" element={
-                     <PrivateRoute>
-                        <CreateCourse />       
-                     </PrivateRoute>                  
-                  } />
-                   <Route path="/courses/:id/update" element={
-                     <PrivateRoute>
-                        <UpdateCourse />       
-                     </PrivateRoute>                  
-                  } />
-                  
-                  <Route path="/signin" element={<UserSignIn />} />
-                  <Route path="/signup" element={<UserSignUp />} />
-                  <Route path="/signout" element={<UserSignOut />} />
-              </Routes>
-
-          
-          </BrowserRouter>
-      </Provider>
+      <CookiesProvider>
+        <Provider value={userInfo}>
+            <BrowserRouter>
+                <Header />
+                <Routes>
+                    <Route exact path="/" element={<Courses />} />
+                    <Route path="/courses/:id" element={<CourseDetail userInfo={userInfo}/>} />
+                    <Route path="/courses/create" element={
+                      <PrivateRoute>
+                          <CreateCourse userInfo={userInfo}/>       
+                      </PrivateRoute>                  
+                    } />
+                    <Route path="/courses/:id/update" element={
+                      <PrivateRoute>
+                          <UpdateCourse userInfo={userInfo}/>       
+                      </PrivateRoute>                  
+                    } />
+                    
+                    <Route path="/signin" element={<UserSignIn setContextSignIn={setUserInfo}/>} />
+                    <Route path="/signup" element={<UserSignUp setContextSignUp={setUserInfo}/>} />
+                    <Route path="/signout" element={<UserSignOut setContext={setUserInfo} />} />
+                </Routes>            
+            </BrowserRouter>
+        </Provider>
+      </CookiesProvider>
     );
 
 
