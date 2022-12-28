@@ -10,6 +10,7 @@ const CourseDetail = (props) =>{
     const [course, setCourse] = useState({
         materialsNeeded: '',
     });
+    
     useEffect(()=> {
         fetch(`http://localhost:5000/api/courses/${id}`)
         .then(res => res.json())
@@ -34,8 +35,9 @@ const CourseDetail = (props) =>{
 {/* get user authorization                */}
                   <Consumer>
                        {(userInfo)=> {
+                          console.log(course);
                           return (
-                            userInfo.emailAddress !== "" 
+                            userInfo.emailAddress === course.email && userInfo.emailAddress !== "" 
                             ? 
                             <div>
                                <a className="button" href={`/courses/${id}/update`}>Update Course</a>
@@ -73,7 +75,7 @@ const CourseDetail = (props) =>{
                         </div>
                         <div>
                             <h3 className="course--detail--title">Estimated Time</h3>
-                            <p>14 hours</p>
+                               <p>{course.estimatedTime}</p>
 
                             <h3 className="course--detail--title">Materials Needed</h3>
                             <ul className="course--detail--list">

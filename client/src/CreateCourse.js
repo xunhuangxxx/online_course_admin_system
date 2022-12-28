@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from "react";
-import { Consumer } from "./Context";
+import React, {useState} from "react";
 import {Buffer} from 'buffer';
+import { useNavigate } from "react-router-dom";
 
 
 const CreateCourse = (props) => {
 
     const [errorMsg, setErrorMsg] = useState([]);
+    const navigate = useNavigate();
     
     const [detail, setDetail] = useState({
         userId: props.userInfo.userId,
@@ -76,7 +77,7 @@ const CreateCourse = (props) => {
                 </div>
             </div>
             <button className="button" type="submit" onClick={handleSubmit}>Create Course</button>
-            <button className="button button-secondary" onClick={event => event.preventDefault()}>Cancel</button>
+            <button className="button button-secondary" onClick={() => navigate('/')}>Cancel</button>
         </form>
     </div>
     ) 

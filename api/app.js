@@ -62,7 +62,7 @@ const userAuthentication = async (req, res, next) => {
 
   if(message){
     console.error(message);
-    res.status(401).json({ message: 'Access Denied' });
+    res.status(401).json({ errors: [message] });
   }else{
     next();
   }    
@@ -93,15 +93,14 @@ app.get('/api/users', userAuthentication, async(req, res)=> {
 // Route that create a new user
 app.post('/api/users', async(req, res)=> {
    const user = req.body;
-   if(user.password?.length!==0){
-   
+
     bcrypt.hash(user.password, 8, async function(err, hash) {
       try { 
          await User.create({
            firstName: user.firstName,
            lastName: user.lastName,
            emailAddress: user.emailAddress,
-           password: hash
+           password: user.password?.length !== 0 ? hash : "",
          });
          res.status(201);
          res.location('/');
@@ -117,10 +116,7 @@ app.post('/api/users', async(req, res)=> {
       } 
         res.end();
      });
-   } else {
-     res.status(403).json({message:"Password can not be empty"}); 
-     res.end();
-   }  
+   
 }); 
 
 // Route that get all the courses

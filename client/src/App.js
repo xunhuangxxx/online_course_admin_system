@@ -1,6 +1,6 @@
 
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route,  NavLink, Routes, Redirect} from 'react-router-dom';
+import React, { useState } from "react";
+import { BrowserRouter, Route, Routes,} from 'react-router-dom';
 import { Provider } from './Context';
 import { CookiesProvider , useCookies} from "react-cookie";
 

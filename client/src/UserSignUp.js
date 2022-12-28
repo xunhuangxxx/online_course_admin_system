@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { useNavigate, useLocation} from "react-router-dom";
+import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import {useCookies} from "react-cookie"
 
 
@@ -11,7 +11,7 @@ const UserSignUp = (props) => {
         emailAddress: "",
         password: "",
     });
-    const [errorMsg, setErrorMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState([]);
 
     const [cookies, setCookie] = useCookies();
 
@@ -41,7 +41,7 @@ const UserSignUp = (props) => {
                password: user.password,  
               });
               
-              setCookie(JSON.stringify({
+              setCookie('user', JSON.stringify({
                firstName: user.firstName,
                lastName: user.lastName,
                emailAddress: user.emailAddress,
@@ -53,6 +53,7 @@ const UserSignUp = (props) => {
            }   
          })
          .then(res => {
+            console.log(res);
             if(res && res.errors){
               setErrorMsg(res.errors.join(", "));   
             }

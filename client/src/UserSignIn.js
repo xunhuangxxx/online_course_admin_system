@@ -26,30 +26,34 @@ const UserSignIn = (props) =>{
         })
         .then(res => res.json())
         .then(res => {
-            if(res.status === 401){
-              if(res.errors){
-                setErrorMsg(res.errors.join(", "));        
-              }             
-            } else{
-               props.setContextSignIn({
-                userId: res.userId,
-                firstName: res.firstName,
-                lastName: res.lastName,
-                emailAddress: res.emailAddress,
-                password: user.password
-                 
-               });
-               setCookie('user', JSON.stringify({
-                userId: res.userId,
-                firstName: res.firstName,
-                lastName: res.lastName,
-                emailAddress: res.emailAddress,
-                password: user.password
-               })); 
-               //return to previous page after sign in 
-               return navigate(-1);
-            }   
+            if(!res.errors){
+                props.setContextSignIn({
+                    userId: res.userId,
+                    firstName: res.firstName,
+                    lastName: res.lastName,
+                    emailAddress: res.emailAddress,
+                    password: user.password
+                     
+                   });
+                   setCookie('user', JSON.stringify({
+                    userId: res.userId,
+                    firstName: res.firstName,
+                    lastName: res.lastName,
+                    emailAddress: res.emailAddress,
+                    password: user.password
+                   })); 
+                   //return to previous page after sign in 
+                   return navigate(-1);            
+            }else{
+                setErrorMsg(res.errors);        
+            }
         })
+        // .then(res => { 
+        //     console.log(res);
+        //     if(res){
+        //         setErrorMsg(res.message);        
+        //     }
+        // })
     }
 
     const handleSignIn = (e) => {

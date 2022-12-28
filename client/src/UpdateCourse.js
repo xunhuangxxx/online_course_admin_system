@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Consumer } from "./Context";
 import {Buffer} from "buffer";
 
 const UpdateCourse = (props) => {
    
+    const navigate = useNavigate();
     let { id } = useParams();
 
     const [course, setCourse] = useState({
@@ -97,7 +98,7 @@ const UpdateCourse = (props) => {
                     </div>
                 </div>
                 <button className="button" onClick={handleSubmit}>Update Course</button>
-                <button className="button button-secondary" onClick={e => e.preventDefault()}>Cancel</button>
+                <button className="button button-secondary" onClick={() => navigate('/')}>Cancel</button>
             </form>
         </div>
     )
