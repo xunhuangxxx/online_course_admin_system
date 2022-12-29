@@ -13,7 +13,7 @@ const UserSignUp = (props) => {
     });
     const [errorMsg, setErrorMsg] = useState([]);
 
-    const [cookies, setCookie] = useCookies();
+    const [, setCookie] = useCookies();
 
     const navigate = useNavigate();
     

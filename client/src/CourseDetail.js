@@ -89,6 +89,8 @@ const CourseDetail = (props) =>{
                                                 </ReactMarkdown>
                                             </li>
                                         )
+                                    }else{
+                                        return null;
                                     }
                                 })} 
                             </ul>

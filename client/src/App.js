@@ -16,7 +16,7 @@ import UserSignOut from "./UserSignOut";
 import PrivateRoute from "./PrivateRoute";
 
 function App() {
-    const [cookies, setCookies] = useCookies();
+    const [cookies] = useCookies();
 
     const user = cookies.user || {};
    // get cookies if exist 

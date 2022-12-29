@@ -3,7 +3,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
-const { sequelize, models, User, Course } = require('./models/index');
+const { sequelize, User, Course } = require('./models/index');
 const bcrypt = require('bcrypt');
 const auth = require('basic-auth');
 const cors = require('cors');
