@@ -1,2 +1,2 @@
-# full-stack-app-with-react-and-rest-api_v1
+# Online Course Admin System
  full stack app with react and rest api
