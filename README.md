@@ -5,6 +5,7 @@ It's an online course admin system that
  - has registration functionality which allows the user to sign-in/sign-up
  - users can create the course and only the users who created the course can edit/delete the course
  - validates all the form input (happens in the backend and send a response back with error code and messages) and shows error message when errors occurs, shows forbidden massege when user has no access to the page
+ - will redirect the user back to the main page once signed out
 
 # How to run
 This repo contains both frontend and backend of the app, so in order to run the app properly, you need to run the backend service first
