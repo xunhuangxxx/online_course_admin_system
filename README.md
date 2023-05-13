@@ -1,13 +1,23 @@
 # Online Course Admin System
 
-It's a admin system that 
+It's an online course admin system that 
  
- - has registration function that users can sign-in/sign-up
- - users can create/delete/update course and edit the course details
- - shows error message when errors occurs, shows forbidden massege when user has no access to the page
+ - has registration functionality which allows the user to sign-in/sign-up
+ - users can create the course and only the users who created the course can edit/delete the course
+ - validates all the form input (happens in the backend and send a response back with error code and messages) and shows error message when errors occurs, shows forbidden massege when user has no access to the page
 
 # How to run
-Just run `python -m SimpleHTTPServer 3000` in your terminal, and then go to `localhost:3000` in your browser
+This repo contains both frontend and backend of the app, so in order to run the app properly, you need to run the backend service first
+
+## Server side
+1. Navigate inside the `api` folder and run `yarn` to install all the dependencies
+2. Run `yarn seed` to seed all the data to a table in the database
+3. Run `yarn start` to get the backend api service running
+
+## Client side
+1. Navigate inside the `client` folder and run `yarn` to install all the dependencies
+2. Run `yarn start` to start the app
+3. Go to `localhost:3000` to see the app
 
 # How it looks
 
